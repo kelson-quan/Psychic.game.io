@@ -14,8 +14,8 @@ var winCount = 0;
 var loseCount = 0;
 var guessesRemaining = 10;
 var userGuessCount = 0;
-var userGuess = "";
-var computerGuess = alphabetOptions[Math.floor(Math.random() * alphabetOptions.length)];
+var userGuess = [];
+var computerGuess = alphabetOptions[0];
 
 // Chapter 2 is create functions: computer needs to pick a letter
 //Functions to change the text
@@ -26,40 +26,70 @@ function updateLoseText() {
     loseText.innerHTML = "Lose: " + loseCount;
 }
 function updateGuessesRemaining() {
-    guessesLeftText.innerHTML = "Guesses remaining: " + [guessesRemaining - userGuessCount];
+    guessesLeftText.innerHTML = "Guesses remaining: " + guessesRemaining;
 }
 function updateUserGuess() {
     userGuessesText.innerHTML = "User Guesses: " + userGuess;
 }
+// Set function to create a random number and assign to variable computerGuess
+function letterSelector() {
+    computerGuess = alphabetOptions[Math.floor(Math.random() * alphabetOptions.length)]
+}
+
+// Update Function
+function updateAll() {
+    updateWinText();
+    updateLoseText();
+    updateGuessesRemaining();
+    updateUserGuess();
+    letterSelector();
+}
+
+// Reset Function
+function resetValues() {
+    guessesRemaining = 10;
+    userGuessCount = 0;
+    userGuess = [];
+    letterSelector();
+}
 
 // Set initial score
-updateWinText();
-updateLoseText();
-updateGuessesRemaining();
-updateUserGuess();
+updateAll();
+
+
+
 console.log(computerGuess);
+console.log(guessesRemaining);
 
 
 // Chapter 3 Record the key that the user selects
 document.onkeyup = function(event){
-    //If there are no more guesses, then stop the function
-    if (guessesRemaining = 0) {
-        alert("You lose, refresh your page to try again");
-        return;
-    } 
     //Determine which key was pressed, make it lowercase and set it equal to a variable called user input
     var userInput = event.key;
-
+    console.log(guessesRemaining);
     if (userInput === computerGuess){
             alert("Great job, correct");
             winCount++;
-            uptdateWinText();
-        else {
-            alert("Wrong")
+            resetValues();
+            updateAll();
         }
-        questionIndex++;
-        renderQuestion();
-    }
+        else {
+            alert("Wrong");
+            userGuess.push(userInput);
+            guessesRemaining--;
+        }
+    updateAll();
+
+    if (guessesRemaining <= 0) {
+        alert("You lose");
+        loseCount++;
+        resetValues();
+        updateAll();
+        // guessesRemaining = 10;
+        // userGuess = [];
+    
+    } 
+    
 }
 // Chapter 4 Compare the computers number with the users selection
 // Chapter 5 Trigger the changes to guesses and eventually score
